@@ -24,6 +24,7 @@ fn handle_create_package(matches: &ArgMatches) {
         paths: HashMap::new(),
         out_dir: out_dir.to_path_buf(),
         package_name: name.to_string(),
+        xc_framework_name: "RustXcframework".to_string(),
     };
 
     for platform in ApplePlatform::ALL {

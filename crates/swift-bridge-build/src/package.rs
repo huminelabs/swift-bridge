@@ -18,10 +18,13 @@ pub struct CreatePackageConfig {
     pub out_dir: PathBuf,
     /// The name for the Swift package
     pub package_name: String,
+
+    /// The name of the generated XC Framework
+    pub xc_framework_name: String,
 }
 
 impl CreatePackageConfig {
-    /// Creates a new `GeneratePackageConfig` for generating Swift Packages from Rust code.
+    /// Creates a new `GeneratePackageConfig` for generating Swift Packages from Rust code with default XCFramework name.
     pub fn new(
         bridge_dir: PathBuf,
         paths: HashMap<ApplePlatform, PathBuf>,
@@ -33,6 +36,7 @@ impl CreatePackageConfig {
             paths,
             out_dir,
             package_name,
+            xc_framework_name: "RustXcframework".to_string(),
         }
     }
 }
@@ -123,13 +127,16 @@ fn gen_xcframework(output_dir: &Path, config: &CreatePackageConfig) {
         fs::create_dir(&include_dir).expect("Couldn't create inlcude directory for xcframework");
     }
 
+    // Get XC Framework name from config
+    let xc_framework_name = &config.xc_framework_name;
+
     // Create modulemap
     let modulemap_path = include_dir.join("module.modulemap");
-    fs::write(
-        &modulemap_path,
-        "module RustXcframework {\n    header \"SwiftBridgeCore.h\"\n",
-    )
-    .expect("Couldn't write modulemap file");
+    let modulemap_content = format!(
+        "module {} {}",
+        xc_framework_name, "{\n    header \"SwiftBridgeCore.h\"\n"
+    );
+    fs::write(&modulemap_path, modulemap_content).expect("Couldn't write modulemap file");
     let mut modulemap_file = OpenOptions::new()
         .write(true)
         .append(true)
@@ -200,7 +207,7 @@ fn gen_xcframework(output_dir: &Path, config: &CreatePackageConfig) {
     }
 
     // build xcframework
-    let xcframework_dir = output_dir.join("RustXcframework.xcframework");
+    let xcframework_dir = output_dir.join(format!("{}.xcframework", xc_framework_name));
     if xcframework_dir.exists() {
         fs::remove_dir_all(&xcframework_dir).expect("Couldn't delete previous xcframework file");
     }
@@ -265,12 +272,23 @@ fn gen_package(output_dir: &Path, config: &CreatePackageConfig) {
         fs::create_dir_all(&sources_dir).expect("Couldn't create directory for source files");
     }
 
+    let tests_dir = output_dir
+        .join("Tests")
+        .join(format!("{}Tests", &config.package_name));
+    if !tests_dir.exists() {
+        fs::create_dir_all(&tests_dir).expect("Couldn't create directory for test files");
+    }
+
+    // Get XC Framework name from config
+    let xc_framework_name = &config.xc_framework_name;
+
     // Copy bridge `.swift` files and append import statements
     let bridge_dir: &Path = config.bridge_dir.as_ref();
     fs::write(
         sources_dir.join("SwiftBridgeCore.swift"),
         format!(
-            "import RustXcframework\n{}",
+            "import {}\n{}",
+            xc_framework_name,
             fs::read_to_string(&bridge_dir.join("SwiftBridgeCore.swift"))
                 .expect("Couldn't read core bridging swift file")
         ),
@@ -302,7 +320,8 @@ fn gen_package(output_dir: &Path, config: &CreatePackageConfig) {
     fs::write(
         sources_dir.join(&bridge_project_swift_dir.file_name().unwrap()),
         format!(
-            "import RustXcframework\n{}",
+            "import {}\n{}",
+            xc_framework_name,
             fs::read_to_string(&bridge_project_swift_dir)
                 .expect("Couldn't read project's bridging swift file")
         ),
@@ -324,12 +343,16 @@ let package = Package(
 	dependencies: [],
 	targets: [
 		.binaryTarget(
-			name: "RustXcframework",
-			path: "RustXcframework.xcframework"
+			name: "{xc_framework_name}",
+			path: "{xc_framework_name}.xcframework"
 		),
 		.target(
 			name: "{package_name}",
-			dependencies: ["RustXcframework"])
+			dependencies: ["{xc_framework_name}"]),
+        .testTarget(
+            name: "{package_name}Tests",
+            dependencies: ["{package_name}", "{xc_framework_name}"]
+        )
 	]
 )
 	"#
