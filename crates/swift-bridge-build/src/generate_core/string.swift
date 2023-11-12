@@ -21,12 +21,12 @@ extension RustStr {
     }
 }
 extension RustStr: Identifiable {
-    internal var id: String {
+    public var id: String {
         self.toString()
     }
 }
 extension RustStr: Equatable {
-    internal static func == (lhs: RustStr, rhs: RustStr) -> Bool {
+    public static func == (lhs: RustStr, rhs: RustStr) -> Bool {
         return __swift_bridge__$RustStr$partial_eq(lhs, rhs);
     }
 }

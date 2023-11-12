@@ -102,7 +102,7 @@ internal class {type_name}Ref{generics} {{
         } else {
             format!(
                 r#"
-    internal var id: {identifiable_return_ty} {{
+    public var id: {identifiable_return_ty} {{
         return self.{identifiable_func}()
     }}
 "#,
@@ -204,7 +204,7 @@ where {swift_generic_bounds} {{
             format!(
                 r#"
 extension {ty_name}Ref: Equatable {{
-    internal static func == (lhs: {ty_name}Ref, rhs: {ty_name}Ref) -> Bool {{
+    public static func == (lhs: {ty_name}Ref, rhs: {ty_name}Ref) -> Bool {{
         __swift_bridge__${ty_name}$_partial_eq(rhs.ptr, lhs.ptr)
     }}
 }}"#,

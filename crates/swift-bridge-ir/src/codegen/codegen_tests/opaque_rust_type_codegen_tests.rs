@@ -176,7 +176,7 @@ mod extern_rust_equatable_type {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
 extension EquatableTypeRef: Equatable {
-    internal static func == (lhs: EquatableTypeRef, rhs: EquatableTypeRef) -> Bool {
+    public static func == (lhs: EquatableTypeRef, rhs: EquatableTypeRef) -> Bool {
         __swift_bridge__$EquatableType$_partial_eq(rhs.ptr, lhs.ptr)
     }
 }
