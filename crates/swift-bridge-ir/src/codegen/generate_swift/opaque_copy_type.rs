@@ -53,7 +53,7 @@ fn generate_struct_definition(
 
     let declare_struct = if ty.generics.is_empty() {
         format!(
-            r#"public struct {type_name} {{
+            r#"internal struct {type_name} {{
     fileprivate var bytes: {prefix}${type_name}
 
     func intoFfiRepr() -> {prefix}${type_name} {{
@@ -65,7 +65,7 @@ fn generate_struct_definition(
         )
     } else {
         format!(
-            r#"public struct {type_name}{generics} {{
+            r#"internal struct {type_name}{generics} {{
     fileprivate var bytes: SwiftBridgeGenericCopyTypeFfiRepr
 }}"#,
             type_name = type_name,

@@ -174,7 +174,7 @@ mod extern_rust_fn_return_result_opaque_rust {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public func some_function() throws -> SomeType {
+internal func some_function() throws -> SomeType {
     try { let val = __swift_bridge__$some_function(); if val.is_ok { return SomeType(ptr: val.ok_or_err!) } else { throw SomeType(ptr: val.ok_or_err!) } }()
 }
 "#,
@@ -299,7 +299,7 @@ mod extern_rust_fn_return_result_null_and_opaque_rust {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public func some_function() throws -> () {
+internal func some_function() throws -> () {
     try { let val = __swift_bridge__$some_function(); if val != nil { throw SomeType(ptr: val!) } else { return } }()
 }
 "#,
@@ -360,7 +360,7 @@ mod extern_rust_fn_return_result_unit_and_opaque_rust {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public func some_function() throws -> UnitType {
+internal func some_function() throws -> UnitType {
     try { let val = __swift_bridge__$some_function(); if val != nil { throw SomeType(ptr: val!) } else { return UnitType() } }()
 }
 "#,
@@ -432,7 +432,7 @@ mod extern_rust_fn_return_result_opaque_rust_type_and_transparent_enum_type {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public func some_function() throws -> SomeOkType {
+internal func some_function() throws -> SomeOkType {
     try { let val = __swift_bridge__$some_function(); switch val.tag { case __swift_bridge__$ResultSomeOkTypeAndSomeErrEnum$ResultOk: return SomeOkType(ptr: val.payload.ok) case __swift_bridge__$ResultSomeOkTypeAndSomeErrEnum$ResultErr: throw val.payload.err.intoSwiftRepr() default: fatalError() } }()
 }
 "#,
@@ -509,7 +509,7 @@ mod extern_rust_fn_return_result_transparent_enum_type_and_opaque_rust_type {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public func some_function() throws -> SomeOkEnum {
+internal func some_function() throws -> SomeOkEnum {
     try { let val = __swift_bridge__$some_function(); switch val.tag { case __swift_bridge__$ResultSomeOkEnumAndSomeErrType$ResultOk: return val.payload.ok.intoSwiftRepr() case __swift_bridge__$ResultSomeOkEnumAndSomeErrType$ResultErr: throw SomeErrType(ptr: val.payload.err) default: fatalError() } }()
 }
 "#,
@@ -579,7 +579,7 @@ mod extern_rust_fn_return_result_unit_type_and_transparent_enum_type {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public func some_function() throws -> () {
+internal func some_function() throws -> () {
     try { let val = __swift_bridge__$some_function(); switch val.tag { case __swift_bridge__$ResultVoidAndSomeErrEnum$ResultOk: return case __swift_bridge__$ResultVoidAndSomeErrEnum$ResultErr: throw val.payload.err.intoSwiftRepr() default: fatalError() } }()
 }
 "#,
@@ -657,7 +657,7 @@ mod extern_rust_fn_return_result_tuple_type_and_transparent_enum_type {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public func some_function() throws -> (Int32, UInt32) {
+internal func some_function() throws -> (Int32, UInt32) {
     try { let val = __swift_bridge__$some_function(); switch val.tag { case __swift_bridge__$ResultTupleI32U32AndSomeErrEnum$ResultOk: return { let val = val.payload.ok; return (val._0, val._1); }() case __swift_bridge__$ResultTupleI32U32AndSomeErrEnum$ResultErr: throw val.payload.err.intoSwiftRepr() default: fatalError() } }()
 }
 "#,

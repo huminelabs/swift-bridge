@@ -179,7 +179,7 @@ mod extern_rust_fn_option_vector_primitive {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public func some_function(_ arg: Optional<RustVec<Int32>>) -> Optional<RustVec<UInt32>> {
+internal func some_function(_ arg: Optional<RustVec<Int32>>) -> Optional<RustVec<UInt32>> {
     { let val = __swift_bridge__$some_function({ if let val = arg { val.isOwned = false; return val.ptr } else { return nil } }()); if val != nil { return RustVec(ptr: val!) } else { return nil } }()
 }
 "#,
@@ -984,10 +984,10 @@ mod shared_struct_with_option_field_ffi_repr {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public struct SomeStruct {
-    public var field: Optional<UInt8>
+internal struct SomeStruct {
+    internal var field: Optional<UInt8>
 
-    public init(field: Optional<UInt8>) {
+    internal init(field: Optional<UInt8>) {
         self.field = field
     }
 

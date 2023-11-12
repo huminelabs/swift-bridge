@@ -93,19 +93,19 @@ mod extern_rust_type_vec_support {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
 extension MyRustType: Vectorizable {
-    public static func vecOfSelfNew() -> UnsafeMutableRawPointer {
+    internal static func vecOfSelfNew() -> UnsafeMutableRawPointer {
         __swift_bridge__$Vec_MyRustType$new()
     }
 
-    public static func vecOfSelfFree(vecPtr: UnsafeMutableRawPointer) {
+    internal static func vecOfSelfFree(vecPtr: UnsafeMutableRawPointer) {
         __swift_bridge__$Vec_MyRustType$drop(vecPtr)
     }
 
-    public static func vecOfSelfPush(vecPtr: UnsafeMutableRawPointer, value: MyRustType) {
+    internal static func vecOfSelfPush(vecPtr: UnsafeMutableRawPointer, value: MyRustType) {
         __swift_bridge__$Vec_MyRustType$push(vecPtr, {value.isOwned = false; return value.ptr;}())
     }
 
-    public static func vecOfSelfPop(vecPtr: UnsafeMutableRawPointer) -> Optional<Self> {
+    internal static func vecOfSelfPop(vecPtr: UnsafeMutableRawPointer) -> Optional<Self> {
         let pointer = __swift_bridge__$Vec_MyRustType$pop(vecPtr)
         if pointer == nil {
             return nil
@@ -114,7 +114,7 @@ extension MyRustType: Vectorizable {
         }
     }
 
-    public static func vecOfSelfGet(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<MyRustTypeRef> {
+    internal static func vecOfSelfGet(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<MyRustTypeRef> {
         let pointer = __swift_bridge__$Vec_MyRustType$get(vecPtr, index)
         if pointer == nil {
             return nil
@@ -123,7 +123,7 @@ extension MyRustType: Vectorizable {
         }
     }
 
-    public static func vecOfSelfGetMut(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<MyRustTypeRefMut> {
+    internal static func vecOfSelfGetMut(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<MyRustTypeRefMut> {
         let pointer = __swift_bridge__$Vec_MyRustType$get_mut(vecPtr, index)
         if pointer == nil {
             return nil
@@ -132,11 +132,11 @@ extension MyRustType: Vectorizable {
         }
     }
 
-    public static func vecOfSelfAsPtr(vecPtr: UnsafeMutableRawPointer) -> UnsafePointer<MyRustTypeRef> {
+    internal static func vecOfSelfAsPtr(vecPtr: UnsafeMutableRawPointer) -> UnsafePointer<MyRustTypeRef> {
         UnsafePointer<MyRustTypeRef>(OpaquePointer(__swift_bridge__$Vec_MyRustType$as_ptr(vecPtr)))
     }
 
-    public static func vecOfSelfLen(vecPtr: UnsafeMutableRawPointer) -> UInt {
+    internal static func vecOfSelfLen(vecPtr: UnsafeMutableRawPointer) -> UInt {
         __swift_bridge__$Vec_MyRustType$len(vecPtr)
     }
 }
@@ -364,38 +364,38 @@ mod transparent_enum_vec_support {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
 extension SomeEnum: Vectorizable {
-    public static func vecOfSelfNew() -> UnsafeMutableRawPointer {
+    internal static func vecOfSelfNew() -> UnsafeMutableRawPointer {
         __swift_bridge__$Vec_SomeEnum$new()
     }
 
-    public static func vecOfSelfFree(vecPtr: UnsafeMutableRawPointer) {
+    internal static func vecOfSelfFree(vecPtr: UnsafeMutableRawPointer) {
         __swift_bridge__$Vec_SomeEnum$drop(vecPtr)
     }
 
-    public static func vecOfSelfPush(vecPtr: UnsafeMutableRawPointer, value: Self) {
+    internal static func vecOfSelfPush(vecPtr: UnsafeMutableRawPointer, value: Self) {
         __swift_bridge__$Vec_SomeEnum$push(vecPtr, value.intoFfiRepr())
     }
 
-    public static func vecOfSelfPop(vecPtr: UnsafeMutableRawPointer) -> Optional<Self> {
+    internal static func vecOfSelfPop(vecPtr: UnsafeMutableRawPointer) -> Optional<Self> {
         let maybeEnum = __swift_bridge__$Vec_SomeEnum$pop(vecPtr)
         return maybeEnum.intoSwiftRepr()
     }
 
-    public static func vecOfSelfGet(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<Self> {
+    internal static func vecOfSelfGet(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<Self> {
         let maybeEnum = __swift_bridge__$Vec_SomeEnum$get(vecPtr, index)
         return maybeEnum.intoSwiftRepr()
     }
 
-    public static func vecOfSelfGetMut(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<Self> {
+    internal static func vecOfSelfGetMut(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<Self> {
         let maybeEnum = __swift_bridge__$Vec_SomeEnum$get_mut(vecPtr, index)
         return maybeEnum.intoSwiftRepr()
     }
 
-    public static func vecOfSelfAsPtr(vecPtr: UnsafeMutableRawPointer) -> UnsafePointer<Self> {
+    internal static func vecOfSelfAsPtr(vecPtr: UnsafeMutableRawPointer) -> UnsafePointer<Self> {
         UnsafePointer<Self>(OpaquePointer(__swift_bridge__$Vec_SomeEnum$as_ptr(vecPtr)))
     }
 
-    public static func vecOfSelfLen(vecPtr: UnsafeMutableRawPointer) -> UInt {
+    internal static func vecOfSelfLen(vecPtr: UnsafeMutableRawPointer) -> UInt {
         __swift_bridge__$Vec_SomeEnum$len(vecPtr)
     }
 }

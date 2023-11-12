@@ -1,5 +1,5 @@
 pub const SWIFT_RUST_RESULT: &'static str = r#"
-public enum RustResult<T, E> {
+internal enum RustResult<T, E> {
     case Ok(T)
     case Err(E)
 }

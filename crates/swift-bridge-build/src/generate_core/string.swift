@@ -1,7 +1,7 @@
 import Foundation
 
 extension RustString {
-    public func toString() -> String {
+    internal func toString() -> String {
         let str = self.as_str()
         let string = str.toString()
 
@@ -15,32 +15,32 @@ extension RustStr {
         return bytes
     }
 
-    public func toString() -> String {
+    internal func toString() -> String {
         let bytes = self.toBufferPointer()
         return String(bytes: bytes, encoding: .utf8)!
     }
 }
 extension RustStr: Identifiable {
-    public var id: String {
+    internal var id: String {
         self.toString()
     }
 }
 extension RustStr: Equatable {
-    public static func == (lhs: RustStr, rhs: RustStr) -> Bool {
+    internal static func == (lhs: RustStr, rhs: RustStr) -> Bool {
         return __swift_bridge__$RustStr$partial_eq(lhs, rhs);
     }
 }
 
-public protocol IntoRustString {
+internal protocol IntoRustString {
     func intoRustString() -> RustString;
 }
 
-public protocol ToRustStr {
+internal protocol ToRustStr {
     func toRustStr<T> (_ withUnsafeRustStr: (RustStr) -> T) -> T;
 }
 
 extension String: IntoRustString {
-    public func intoRustString() -> RustString {
+    internal func intoRustString() -> RustString {
         // TODO: When passing an owned Swift std String to Rust we've being wasteful here in that
         //  we're creating a RustString (which involves Boxing a Rust std::string::String)
         //  only to unbox it back into a String once it gets to the Rust side.
@@ -52,7 +52,7 @@ extension String: IntoRustString {
 }
 
 extension RustString: IntoRustString {
-    public func intoRustString() -> RustString {
+    internal func intoRustString() -> RustString {
         self
     }
 }
@@ -75,7 +75,7 @@ func optionalStringIntoRustString<S: IntoRustString>(_ string: Optional<S>) -> R
 extension String: ToRustStr {
     /// Safely get a scoped pointer to the String and then call the callback with a RustStr
     /// that uses that pointer.
-    public func toRustStr<T> (_ withUnsafeRustStr: (RustStr) -> T) -> T {
+    internal func toRustStr<T> (_ withUnsafeRustStr: (RustStr) -> T) -> T {
         return self.utf8CString.withUnsafeBufferPointer({ bufferPtr in
             let rustStr = RustStr(
                 start: UnsafeMutableRawPointer(mutating: bufferPtr.baseAddress!).assumingMemoryBound(to: UInt8.self),
@@ -88,7 +88,7 @@ extension String: ToRustStr {
 }
 
 extension RustStr: ToRustStr {
-    public func toRustStr<T> (_ withUnsafeRustStr: (RustStr) -> T) -> T {
+    internal func toRustStr<T> (_ withUnsafeRustStr: (RustStr) -> T) -> T {
         return withUnsafeRustStr(self)
     }
 }

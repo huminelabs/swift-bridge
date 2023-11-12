@@ -219,23 +219,23 @@ mod protocol_identifiable {
         // which protocols a class implements.
         ExpectedSwiftCode::ContainsManyAfterTrim(vec![
             r#"
-public class SomeTypeRef {
+internal class SomeTypeRef {
     var ptr: UnsafeMutableRawPointer
 
-    public init(ptr: UnsafeMutableRawPointer) {
+    internal init(ptr: UnsafeMutableRawPointer) {
         self.ptr = ptr
     }
 }
 extension SomeTypeRef: Identifiable {
-    public var id: Int16 {
+    internal var id: Int16 {
         return self.some_function()
     }
 }"#,
             r#"
-public class AnotherTypeRef {
+internal class AnotherTypeRef {
     var ptr: UnsafeMutableRawPointer
 
-    public init(ptr: UnsafeMutableRawPointer) {
+    internal init(ptr: UnsafeMutableRawPointer) {
         self.ptr = ptr
     }
 }
@@ -439,7 +439,7 @@ mod function_attribute_swift_name_extern_rust {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public func callRustFromSwift() -> RustString {
+internal func callRustFromSwift() -> RustString {
     RustString(ptr: __swift_bridge__$call_rust_from_swift())
 }
 @_cdecl("__swift_bridge__$call_swift_from_rust")

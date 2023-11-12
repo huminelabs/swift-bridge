@@ -1,7 +1,7 @@
-public class RustString: RustStringRefMut {
+internal class RustString: RustStringRefMut {
     var isOwned: Bool = true
 
-    public override init(ptr: UnsafeMutableRawPointer) {
+    internal override init(ptr: UnsafeMutableRawPointer) {
         super.init(ptr: ptr)
     }
 
@@ -12,55 +12,55 @@ public class RustString: RustStringRefMut {
     }
 }
 extension RustString {
-    public convenience init() {
+    internal convenience init() {
         self.init(ptr: __swift_bridge__$RustString$new())
     }
 
-    public convenience init<GenericToRustStr: ToRustStr>(_ str: GenericToRustStr) {
+    internal convenience init<GenericToRustStr: ToRustStr>(_ str: GenericToRustStr) {
         self.init(ptr: str.toRustStr({ strAsRustStr in
             __swift_bridge__$RustString$new_with_str(strAsRustStr)
         }))
     }
 }
-public class RustStringRefMut: RustStringRef {
-    public override init(ptr: UnsafeMutableRawPointer) {
+internal class RustStringRefMut: RustStringRef {
+    internal override init(ptr: UnsafeMutableRawPointer) {
         super.init(ptr: ptr)
     }
 }
-public class RustStringRef {
+internal class RustStringRef {
     var ptr: UnsafeMutableRawPointer
 
-    public init(ptr: UnsafeMutableRawPointer) {
+    internal init(ptr: UnsafeMutableRawPointer) {
         self.ptr = ptr
     }
 }
 extension RustStringRef {
-    public func len() -> UInt {
+    internal func len() -> UInt {
         __swift_bridge__$RustString$len(ptr)
     }
 
-    public func as_str() -> RustStr {
+    internal func as_str() -> RustStr {
         __swift_bridge__$RustString$as_str(ptr)
     }
 
-    public func trim() -> RustStr {
+    internal func trim() -> RustStr {
         __swift_bridge__$RustString$trim(ptr)
     }
 }
 extension RustString: Vectorizable {
-    public static func vecOfSelfNew() -> UnsafeMutableRawPointer {
+    internal static func vecOfSelfNew() -> UnsafeMutableRawPointer {
         __swift_bridge__$Vec_RustString$new()
     }
 
-    public static func vecOfSelfFree(vecPtr: UnsafeMutableRawPointer) {
+    internal static func vecOfSelfFree(vecPtr: UnsafeMutableRawPointer) {
         __swift_bridge__$Vec_RustString$drop(vecPtr)
     }
 
-    public static func vecOfSelfPush(vecPtr: UnsafeMutableRawPointer, value: RustString) {
+    internal static func vecOfSelfPush(vecPtr: UnsafeMutableRawPointer, value: RustString) {
         __swift_bridge__$Vec_RustString$push(vecPtr, {value.isOwned = false; return value.ptr;}())
     }
 
-    public static func vecOfSelfPop(vecPtr: UnsafeMutableRawPointer) -> Optional<Self> {
+    internal static func vecOfSelfPop(vecPtr: UnsafeMutableRawPointer) -> Optional<Self> {
         let pointer = __swift_bridge__$Vec_RustString$pop(vecPtr)
         if pointer == nil {
             return nil
@@ -69,7 +69,7 @@ extension RustString: Vectorizable {
         }
     }
 
-    public static func vecOfSelfGet(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<RustStringRef> {
+    internal static func vecOfSelfGet(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<RustStringRef> {
         let pointer = __swift_bridge__$Vec_RustString$get(vecPtr, index)
         if pointer == nil {
             return nil
@@ -78,7 +78,7 @@ extension RustString: Vectorizable {
         }
     }
 
-    public static func vecOfSelfGetMut(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<RustStringRefMut> {
+    internal static func vecOfSelfGetMut(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<RustStringRefMut> {
         let pointer = __swift_bridge__$Vec_RustString$get_mut(vecPtr, index)
         if pointer == nil {
             return nil
@@ -87,11 +87,11 @@ extension RustString: Vectorizable {
         }
     }
 
-    public static func vecOfSelfAsPtr(vecPtr: UnsafeMutableRawPointer) -> UnsafePointer<RustStringRef> {
+    internal static func vecOfSelfAsPtr(vecPtr: UnsafeMutableRawPointer) -> UnsafePointer<RustStringRef> {
         UnsafePointer<RustStringRef>(OpaquePointer(__swift_bridge__$Vec_RustString$as_ptr(vecPtr)))
     }
 
-    public static func vecOfSelfLen(vecPtr: UnsafeMutableRawPointer) -> UInt {
+    internal static func vecOfSelfLen(vecPtr: UnsafeMutableRawPointer) -> UInt {
         __swift_bridge__$Vec_RustString$len(vecPtr)
     }
 }

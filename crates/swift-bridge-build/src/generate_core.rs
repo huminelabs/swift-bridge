@@ -143,19 +143,19 @@ fn conform_to_vectorizable(swift_ty: &str, rust_ty: &str) -> String {
     format!(
         r#"
 extension {swift_ty}: Vectorizable {{
-    public static func vecOfSelfNew() -> UnsafeMutableRawPointer {{
+    internal static func vecOfSelfNew() -> UnsafeMutableRawPointer {{
         __swift_bridge__$Vec_{rust_ty}$new()
     }}
 
-    public static func vecOfSelfFree(vecPtr: UnsafeMutableRawPointer) {{
+    internal static func vecOfSelfFree(vecPtr: UnsafeMutableRawPointer) {{
         __swift_bridge__$Vec_{rust_ty}$_free(vecPtr)
     }}
 
-    public static func vecOfSelfPush(vecPtr: UnsafeMutableRawPointer, value: Self) {{
+    internal static func vecOfSelfPush(vecPtr: UnsafeMutableRawPointer, value: Self) {{
         __swift_bridge__$Vec_{rust_ty}$push(vecPtr, value)
     }}
 
-    public static func vecOfSelfPop(vecPtr: UnsafeMutableRawPointer) -> Optional<Self> {{
+    internal static func vecOfSelfPop(vecPtr: UnsafeMutableRawPointer) -> Optional<Self> {{
         let val = __swift_bridge__$Vec_{rust_ty}$pop(vecPtr)
         if val.is_some {{
             return val.val
@@ -164,7 +164,7 @@ extension {swift_ty}: Vectorizable {{
         }}
     }}
 
-    public static func vecOfSelfGet(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<Self> {{
+    internal static func vecOfSelfGet(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<Self> {{
         let val = __swift_bridge__$Vec_{rust_ty}$get(vecPtr, index)
         if val.is_some {{
             return val.val
@@ -173,7 +173,7 @@ extension {swift_ty}: Vectorizable {{
         }}
     }}
 
-    public static func vecOfSelfGetMut(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<Self> {{
+    internal static func vecOfSelfGetMut(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<Self> {{
         let val = __swift_bridge__$Vec_{rust_ty}$get_mut(vecPtr, index)
         if val.is_some {{
             return val.val
@@ -182,11 +182,11 @@ extension {swift_ty}: Vectorizable {{
         }}
     }}
 
-    public static func vecOfSelfAsPtr(vecPtr: UnsafeMutableRawPointer) -> UnsafePointer<Self> {{
+    internal static func vecOfSelfAsPtr(vecPtr: UnsafeMutableRawPointer) -> UnsafePointer<Self> {{
         UnsafePointer<Self>(OpaquePointer(__swift_bridge__$Vec_{rust_ty}$as_ptr(vecPtr)))
     }}
 
-    public static func vecOfSelfLen(vecPtr: UnsafeMutableRawPointer) -> UInt {{
+    internal static func vecOfSelfLen(vecPtr: UnsafeMutableRawPointer) -> UInt {{
         __swift_bridge__$Vec_{rust_ty}$len(vecPtr)
     }}
 }}

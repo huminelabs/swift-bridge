@@ -35,7 +35,7 @@ mod extern_rust_tuple_primitives {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsManyAfterTrim(vec![
             r#"
-public func some_function(_ arg: (Int32, UInt8)) -> (Int32, UInt8) {
+internal func some_function(_ arg: (Int32, UInt8)) -> (Int32, UInt8) {
     { let val = __swift_bridge__$some_function(__swift_bridge__$tuple$I32U8(_0: arg.0, _1: arg.1)); return (val._0, val._1); }()
 }
 "#,
@@ -101,7 +101,7 @@ mod extern_rust_tuple_string_primitive {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsManyAfterTrim(vec![
             r#"
-public func some_function<GenericIntoRustString: IntoRustString>(_ arg1: (GenericIntoRustString, UInt32)) -> (RustString, UInt32) {
+internal func some_function<GenericIntoRustString: IntoRustString>(_ arg1: (GenericIntoRustString, UInt32)) -> (RustString, UInt32) {
     { let val = __swift_bridge__$some_function(__swift_bridge__$tuple$StringU32(_0: { let rustString = arg1.0.intoRustString(); rustString.isOwned = false; return rustString.ptr }(), _1: arg1.1)); return (RustString(ptr: val._0), val._1); }()
 }
 "#,
@@ -172,7 +172,7 @@ mod extern_rust_tuple_opaque_rust_primitive {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsManyAfterTrim(vec![
             r#"
-public func some_function(_ arg1: (SomeType, UInt32)) -> (SomeType, UInt32) {
+internal func some_function(_ arg1: (SomeType, UInt32)) -> (SomeType, UInt32) {
     { let val = __swift_bridge__$some_function(__swift_bridge__$tuple$SomeTypeU32(_0: {arg1.0.isOwned = false; return arg1.0.ptr;}(), _1: arg1.1)); return (SomeType(ptr: val._0), val._1); }()
 }
 "#,
@@ -239,7 +239,7 @@ mod extern_rust_tuple_f32_isize_bool {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsManyAfterTrim(vec![
             r#"
-public func some_function(_ arg1: (Float, Int, Bool)) -> (Float, Int, Bool) {
+internal func some_function(_ arg1: (Float, Int, Bool)) -> (Float, Int, Bool) {
     { let val = __swift_bridge__$some_function(__swift_bridge__$tuple$F32IntBool(_0: arg1.0, _1: arg1.1, _2: arg1.2)); return (val._0, val._1, val._2); }()
 }
 "#,

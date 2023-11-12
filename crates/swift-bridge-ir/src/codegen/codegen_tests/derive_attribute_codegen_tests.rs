@@ -39,7 +39,7 @@ mod derive_debug_enum {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#" 
 extension SomeEnum: CustomDebugStringConvertible {
-    public var debugDescription: String {
+    internal var debugDescription: String {
         RustString(ptr: __swift_bridge__$SomeEnum$Debug(self.intoFfiRepr())).toString()
     }
 }

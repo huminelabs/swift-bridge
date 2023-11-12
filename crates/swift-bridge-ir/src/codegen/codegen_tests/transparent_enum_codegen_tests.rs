@@ -65,7 +65,7 @@ mod generates_enum_to_and_from_ffi_conversions_no_data {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public enum SomeEnum {
+internal enum SomeEnum {
     case Variant1
     case Variant2
 }
@@ -408,7 +408,7 @@ mod generates_enum_to_and_from_ffi_conversions_one_unnamed_data_and_no_fields {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public enum SomeEnum {
+internal enum SomeEnum {
     case Variant1(Int32)
     case Variant2
 }
@@ -526,7 +526,7 @@ mod generates_enum_to_and_from_ffi_conversions_unnamed_data_and_two_unnamed_data
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public enum SomeEnum {
+internal enum SomeEnum {
     case A(Int32, UInt32)
     case B(RustString)
 }
@@ -660,7 +660,7 @@ mod generates_enum_to_and_from_ffi_conversions_one_named_data_and_two_named_data
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public enum SomeEnum {
+internal enum SomeEnum {
     case A(data1: Int32, data2: UInt32)
     case B(description: RustString)
 }
@@ -790,7 +790,7 @@ mod generates_enum_with_opaque_rust_data {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public enum SomeEnum {
+internal enum SomeEnum {
     case Unnamed(SomeType)
     case Named(data: SomeType)
 }

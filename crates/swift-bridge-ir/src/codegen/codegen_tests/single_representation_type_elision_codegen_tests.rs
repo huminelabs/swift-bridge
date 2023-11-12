@@ -48,7 +48,7 @@ mod elides_null_type {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsManyAfterTrim(vec![
             r#"
-public func rust_function(_ arg1: (), _ arg2: ()) -> () {
+internal func rust_function(_ arg1: (), _ arg2: ()) -> () {
     __swift_bridge__$rust_function()
 }
 "#,
@@ -134,7 +134,7 @@ mod elides_unit_struct {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsManyAfterTrim(vec![
             r#"
-public func rust_function(_ arg1: UnitStruct1, _ arg2: UnitStruct2, _ arg3: UnitStruct3) -> UnitStruct1 {
+internal func rust_function(_ arg1: UnitStruct1, _ arg2: UnitStruct2, _ arg3: UnitStruct3) -> UnitStruct1 {
     { let _ = __swift_bridge__$rust_function(); return UnitStruct1() }()
 }
 "#,

@@ -50,8 +50,8 @@ impl SwiftBridgeModule {
                 // No need to generate any code. Swift will automatically generate a
                 //  struct from our C header typedef that we generate for this struct.
                 let swift_struct = format!(
-                    r#"public struct {struct_name} {{{fields}
-    public init({initializer_params}) {{{initializer_body}}}
+                    r#"internal struct {struct_name} {{{fields}
+    internal init({initializer_params}) {{{initializer_body}}}
 
     @inline(__always)
     func intoFfiRepr() -> {ffi_repr_name} {{
@@ -158,7 +158,7 @@ extension {option_ffi_name} {{
             let bridged_ty = BridgedType::new_with_type(field.field_type(), &self.types).unwrap();
 
             fields += &format!(
-                "    public var {}: {}\n",
+                "    internal var {}: {}\n",
                 field.swift_name_string(),
                 bridged_ty.to_swift_type(TypePosition::SharedStructField, &self.types)
             );

@@ -33,10 +33,10 @@ mod extern_rust_type {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public class SomeType: SomeTypeRefMut {
+internal class SomeType: SomeTypeRefMut {
     var isOwned: Bool = true
 
-    public override init(ptr: UnsafeMutableRawPointer) {
+    internal override init(ptr: UnsafeMutableRawPointer) {
         super.init(ptr: ptr)
     }
 
@@ -46,15 +46,15 @@ public class SomeType: SomeTypeRefMut {
         }
     }
 }
-public class SomeTypeRefMut: SomeTypeRef {
-    public override init(ptr: UnsafeMutableRawPointer) {
+internal class SomeTypeRefMut: SomeTypeRef {
+    internal override init(ptr: UnsafeMutableRawPointer) {
         super.init(ptr: ptr)
     }
 }
-public class SomeTypeRef {
+internal class SomeTypeRef {
     var ptr: UnsafeMutableRawPointer
 
-    public init(ptr: UnsafeMutableRawPointer) {
+    internal init(ptr: UnsafeMutableRawPointer) {
         self.ptr = ptr
     }
 }
@@ -115,7 +115,7 @@ mod extern_rust_hashable_type {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
 extension HashableTypeRef: Hashable{
-    public func hash(into hasher: inout Hasher){
+    internal func hash(into hasher: inout Hasher){
         hasher.combine(__swift_bridge__$HashableType$_hash(self.ptr))
     }
 }
@@ -176,7 +176,7 @@ mod extern_rust_equatable_type {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
 extension EquatableTypeRef: Equatable {
-    public static func == (lhs: EquatableTypeRef, rhs: EquatableTypeRef) -> Bool {
+    internal static func == (lhs: EquatableTypeRef, rhs: EquatableTypeRef) -> Bool {
         __swift_bridge__$EquatableType$_partial_eq(rhs.ptr, lhs.ptr)
     }
 }
@@ -273,7 +273,7 @@ mod extern_rust_copy_type {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsManyAfterTrim(vec![
             r#"
-public struct SomeType {
+internal struct SomeType {
     fileprivate var bytes: __swift_bridge__$SomeType
 
     func intoFfiRepr() -> __swift_bridge__$SomeType {
@@ -357,14 +357,14 @@ mod extern_rust_copy_type_method {
         ExpectedSwiftCode::ContainsManyAfterTrim(vec![
             r#"
 extension SomeType {
-    public func some_method() {
+    internal func some_method() {
         __swift_bridge__$SomeType$some_method(self.bytes)
     }
 }
 "#,
             r#"
 extension SomeType {
-    public func some_method_ref() {
+    internal func some_method_ref() {
         __swift_bridge__$SomeType$some_method_ref(self.bytes)
     }
 }

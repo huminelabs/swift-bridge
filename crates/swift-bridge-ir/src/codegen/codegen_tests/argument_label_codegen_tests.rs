@@ -31,7 +31,7 @@ mod argument_label {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public func some_function(argumentLabel1 parameter_name1: Int32, argumentLabel2 parameter_name2: UInt32) {
+internal func some_function(argumentLabel1 parameter_name1: Int32, argumentLabel2 parameter_name2: UInt32) {
     __swift_bridge__$some_function(parameter_name1, parameter_name2)
 }
             
@@ -88,7 +88,7 @@ mod argument_one_label {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public func some_function(argumentLabel1 parameter_name1: Int32, _ parameter_name2: UInt32) {
+internal func some_function(argumentLabel1 parameter_name1: Int32, _ parameter_name2: UInt32) {
     __swift_bridge__$some_function(parameter_name1, parameter_name2)
 }
             

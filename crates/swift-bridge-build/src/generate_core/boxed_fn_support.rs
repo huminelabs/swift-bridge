@@ -3,7 +3,7 @@
 /// Support types for callbacks that have arguments or return a value are generated dynamically
 /// when generating code for bridged functions.
 pub const SWIFT_CALLBACK_SUPPORT_NO_ARGS_NO_RETURN: &'static str = r#"
-public class __private__RustFnOnceCallbackNoArgsNoRet {
+internal class __private__RustFnOnceCallbackNoArgsNoRet {
     var ptr: UnsafeMutableRawPointer
     var called = false
 

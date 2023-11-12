@@ -53,15 +53,15 @@ pub(super) fn gen_func_swift_calls_rust(
 
     let public_func_fn_name = if function.is_swift_initializer {
         if function.is_copy_method_on_opaque_type() {
-            "public init".to_string()
+            "internal init".to_string()
         } else {
-            "public convenience init".to_string()
+            "internal convenience init".to_string()
         }
     } else {
         if let Some(swift_name) = &function.swift_name_override {
-            format!("public func {}", swift_name.value())
+            format!("internal func {}", swift_name.value())
         } else {
-            format!("public func {}", fn_name.as_str())
+            format!("internal func {}", fn_name.as_str())
         }
     };
 
@@ -238,7 +238,7 @@ pub(super) fn gen_func_swift_calls_rust(
             r#"{indentation}class {cb_wrapper_ty} {{
 {indentation}    var cb: (Result<{rust_fn_ret_ty}, {error}>) -> ()
 {indentation}
-{indentation}    public init(cb: @escaping (Result<{rust_fn_ret_ty}, {error}>) -> ()) {{
+{indentation}    internal init(cb: @escaping (Result<{rust_fn_ret_ty}, {error}>) -> ()) {{
 {indentation}        self.cb = cb
 {indentation}    }}
 {indentation}}}"#,

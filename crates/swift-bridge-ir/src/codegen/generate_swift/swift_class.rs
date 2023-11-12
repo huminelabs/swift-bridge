@@ -51,10 +51,10 @@ fn create_class_declaration(
         };
 
         format!(
-            r#"public class {type_name}{generics}: {type_name}RefMut{generics} {{
+            r#"internal class {type_name}{generics}: {type_name}RefMut{generics} {{
     var isOwned: Bool = true
 
-    public override init(ptr: UnsafeMutableRawPointer) {{
+    internal override init(ptr: UnsafeMutableRawPointer) {{
         super.init(ptr: ptr)
     }}
 
@@ -73,8 +73,8 @@ fn create_class_declaration(
     let mut class_ref_mut_decl = {
         format!(
             r#"
-public class {type_name}RefMut{generics}: {type_name}Ref{generics} {{
-    public override init(ptr: UnsafeMutableRawPointer) {{
+internal class {type_name}RefMut{generics}: {type_name}Ref{generics} {{
+    internal override init(ptr: UnsafeMutableRawPointer) {{
         super.init(ptr: ptr)
     }}
 }}"#,
@@ -85,10 +85,10 @@ public class {type_name}RefMut{generics}: {type_name}Ref{generics} {{
     let mut class_ref_decl = {
         format!(
             r#"
-public class {type_name}Ref{generics} {{
+internal class {type_name}Ref{generics} {{
     var ptr: UnsafeMutableRawPointer
 
-    public init(ptr: UnsafeMutableRawPointer) {{
+    internal init(ptr: UnsafeMutableRawPointer) {{
         self.ptr = ptr
     }}
 }}"#,
@@ -102,7 +102,7 @@ public class {type_name}Ref{generics} {{
         } else {
             format!(
                 r#"
-    public var id: {identifiable_return_ty} {{
+    internal var id: {identifiable_return_ty} {{
         return self.{identifiable_func}()
     }}
 "#,
@@ -189,7 +189,7 @@ extension {type_name}RefMut {{
             r#"
 extension {type_name}: SwiftBridgeGenericFreer
 where {swift_generic_bounds} {{
-    public func rust_free() {{
+    internal func rust_free() {{
         {free_func_name}(ptr)
     }}
 }}"#,
@@ -204,7 +204,7 @@ where {swift_generic_bounds} {{
             format!(
                 r#"
 extension {ty_name}Ref: Equatable {{
-    public static func == (lhs: {ty_name}Ref, rhs: {ty_name}Ref) -> Bool {{
+    internal static func == (lhs: {ty_name}Ref, rhs: {ty_name}Ref) -> Bool {{
         __swift_bridge__${ty_name}$_partial_eq(rhs.ptr, lhs.ptr)
     }}
 }}"#,
@@ -219,7 +219,7 @@ extension {ty_name}Ref: Equatable {{
             format!(
                 r#"
 extension {ty_name}Ref: Hashable{{
-    public func hash(into hasher: inout Hasher){{
+    internal func hash(into hasher: inout Hasher){{
         hasher.combine(__swift_bridge__${ty_name}$_hash(self.ptr))
     }}
 }}

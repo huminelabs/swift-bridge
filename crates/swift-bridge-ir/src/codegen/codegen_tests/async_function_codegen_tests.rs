@@ -62,7 +62,7 @@ func some_function() async {
 class CbWrapper$some_function {
     var cb: (Result<(), Never>) -> ()
 
-    public init(cb: @escaping (Result<(), Never>) -> ()) {
+    internal init(cb: @escaping (Result<(), Never>) -> ()) {
         self.cb = cb
     }
 }
@@ -150,7 +150,7 @@ func some_function(_ arg: UInt32) async {
 class CbWrapper$some_function {
     var cb: (Result<(), Never>) -> ()
 
-    public init(cb: @escaping (Result<(), Never>) -> ()) {
+    internal init(cb: @escaping (Result<(), Never>) -> ()) {
         self.cb = cb
     }
 }
@@ -238,7 +238,7 @@ func some_function() async -> UInt8 {
 class CbWrapper$some_function {
     var cb: (Result<UInt8, Never>) -> ()
 
-    public init(cb: @escaping (Result<UInt8, Never>) -> ()) {
+    internal init(cb: @escaping (Result<UInt8, Never>) -> ()) {
         self.cb = cb
     }
 }
@@ -326,7 +326,7 @@ func some_function() async -> RustString {
 class CbWrapper$some_function {
     var cb: (Result<RustString, Never>) -> ()
 
-    public init(cb: @escaping (Result<RustString, Never>) -> ()) {
+    internal init(cb: @escaping (Result<RustString, Never>) -> ()) {
         self.cb = cb
     }
 }
@@ -417,7 +417,7 @@ func some_function() async -> SomeStruct {
 class CbWrapper$some_function {
     var cb: (Result<SomeStruct, Never>) -> ()
 
-    public init(cb: @escaping (Result<SomeStruct, Never>) -> ()) {
+    internal init(cb: @escaping (Result<SomeStruct, Never>) -> ()) {
         self.cb = cb
     }
 }
@@ -487,7 +487,7 @@ mod extern_rust_async_method {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
 extension SomeTypeRef {
-    public func some_method() async {
+    internal func some_method() async {
         func onComplete(cbWrapperPtr: UnsafeMutableRawPointer?) {
             let wrapper = Unmanaged<CbWrapper$SomeType$some_method>.fromOpaque(cbWrapperPtr!).takeRetainedValue()
             wrapper.cb(.success(()))
@@ -507,7 +507,7 @@ extension SomeTypeRef {
     class CbWrapper$SomeType$some_method {
         var cb: (Result<(), Never>) -> ()
     
-        public init(cb: @escaping (Result<(), Never>) -> ()) {
+        internal init(cb: @escaping (Result<(), Never>) -> ()) {
             self.cb = cb
         }
     }
@@ -599,7 +599,7 @@ mod extern_rust_async_function_returns_result_opaque {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public func some_function() async throws -> OkType {
+internal func some_function() async throws -> OkType {
     func onComplete(cbWrapperPtr: UnsafeMutableRawPointer?, rustFnRetVal: __private__ResultPtrAndPtr) {
         let wrapper = Unmanaged<CbWrapper$some_function>.fromOpaque(cbWrapperPtr!).takeRetainedValue()
         if rustFnRetVal.is_ok {
@@ -623,7 +623,7 @@ public func some_function() async throws -> OkType {
 class CbWrapper$some_function {
     var cb: (Result<OkType, Error>) -> ()
 
-    public init(cb: @escaping (Result<OkType, Error>) -> ()) {
+    internal init(cb: @escaping (Result<OkType, Error>) -> ()) {
         self.cb = cb
     }
 }
@@ -704,7 +704,7 @@ mod extern_rust_async_function_returns_result_transparent_enum {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public func some_function() async throws -> OkEnum {
+internal func some_function() async throws -> OkEnum {
     func onComplete(cbWrapperPtr: UnsafeMutableRawPointer?, rustFnRetVal: __swift_bridge__$ResultOkEnumAndErrEnum) {
         let wrapper = Unmanaged<CbWrapper$some_function>.fromOpaque(cbWrapperPtr!).takeRetainedValue()
         switch rustFnRetVal.tag { case __swift_bridge__$ResultOkEnumAndErrEnum$ResultOk: wrapper.cb(.success(rustFnRetVal.payload.ok.intoSwiftRepr())) case __swift_bridge__$ResultOkEnumAndErrEnum$ResultErr: wrapper.cb(.failure(rustFnRetVal.payload.err.intoSwiftRepr())) default: fatalError() }
@@ -724,7 +724,7 @@ public func some_function() async throws -> OkEnum {
 class CbWrapper$some_function {
     var cb: (Result<OkEnum, Error>) -> ()
 
-    public init(cb: @escaping (Result<OkEnum, Error>) -> ()) {
+    internal init(cb: @escaping (Result<OkEnum, Error>) -> ()) {
         self.cb = cb
     }
 }
@@ -805,7 +805,7 @@ mod extern_rust_async_function_returns_result_opaque_rust_transparent_enum {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public func some_function() async throws -> SomeType {
+internal func some_function() async throws -> SomeType {
     func onComplete(cbWrapperPtr: UnsafeMutableRawPointer?, rustFnRetVal: __swift_bridge__$ResultSomeTypeAndErrEnum) {
         let wrapper = Unmanaged<CbWrapper$some_function>.fromOpaque(cbWrapperPtr!).takeRetainedValue()
         switch rustFnRetVal.tag { case __swift_bridge__$ResultSomeTypeAndErrEnum$ResultOk: wrapper.cb(.success(SomeType(ptr: rustFnRetVal.payload.ok))) case __swift_bridge__$ResultSomeTypeAndErrEnum$ResultErr: wrapper.cb(.failure(rustFnRetVal.payload.err.intoSwiftRepr())) default: fatalError() }
@@ -825,7 +825,7 @@ public func some_function() async throws -> SomeType {
 class CbWrapper$some_function {
     var cb: (Result<SomeType, Error>) -> ()
 
-    public init(cb: @escaping (Result<SomeType, Error>) -> ()) {
+    internal init(cb: @escaping (Result<SomeType, Error>) -> ()) {
         self.cb = cb
     }
 }
@@ -902,7 +902,7 @@ mod extern_rust_async_function_returns_result_null_transparent_enum {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public func some_function() async throws -> () {
+internal func some_function() async throws -> () {
     func onComplete(cbWrapperPtr: UnsafeMutableRawPointer?, rustFnRetVal: __swift_bridge__$ResultVoidAndErrEnum) {
         let wrapper = Unmanaged<CbWrapper$some_function>.fromOpaque(cbWrapperPtr!).takeRetainedValue()
         switch rustFnRetVal.tag { case __swift_bridge__$ResultVoidAndErrEnum$ResultOk: wrapper.cb(.success(())) case __swift_bridge__$ResultVoidAndErrEnum$ResultErr: wrapper.cb(.failure(rustFnRetVal.payload.err.intoSwiftRepr())) default: fatalError() }
@@ -922,7 +922,7 @@ public func some_function() async throws -> () {
 class CbWrapper$some_function {
     var cb: (Result<(), Error>) -> ()
 
-    public init(cb: @escaping (Result<(), Error>) -> ()) {
+    internal init(cb: @escaping (Result<(), Error>) -> ()) {
         self.cb = cb
     }
 }
@@ -998,7 +998,7 @@ mod extern_rust_async_function_returns_result_null_opaque {
     fn expected_swift_code() -> ExpectedSwiftCode {
         ExpectedSwiftCode::ContainsAfterTrim(
             r#"
-public func some_function() async throws -> () {
+internal func some_function() async throws -> () {
     func onComplete(cbWrapperPtr: UnsafeMutableRawPointer?, rustFnRetVal: UnsafeMutableRawPointer?) {
         let wrapper = Unmanaged<CbWrapper$some_function>.fromOpaque(cbWrapperPtr!).takeRetainedValue()
         if rustFnRetVal == nil {
@@ -1022,7 +1022,7 @@ public func some_function() async throws -> () {
 class CbWrapper$some_function {
     var cb: (Result<(), Error>) -> ()
 
-    public init(cb: @escaping (Result<(), Error>) -> ()) {
+    internal init(cb: @escaping (Result<(), Error>) -> ()) {
         self.cb = cb
     }
 }
