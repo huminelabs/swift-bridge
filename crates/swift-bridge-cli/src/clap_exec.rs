@@ -20,11 +20,15 @@ fn handle_create_package(matches: &ArgMatches) {
     let name = matches.value_of("name").unwrap(); // required
 
     let mut config = CreatePackageConfig {
+        swift_tools_version: "5.5.0".to_string(),
         bridge_dir: PathBuf::from(bridges_dir),
         paths: HashMap::new(),
         out_dir: out_dir.to_path_buf(),
         package_name: name.to_string(),
         xc_framework_name: "RustXcframework".to_string(),
+        platforms_list: Vec::new(),
+        dependencies: "".to_string(),
+        dependency_packages: Vec::new(),
     };
 
     for platform in ApplePlatform::ALL {

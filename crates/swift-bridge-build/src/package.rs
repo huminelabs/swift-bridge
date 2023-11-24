@@ -10,6 +10,9 @@ use tempfile::tempdir;
 
 /// Config for generating Swift packages
 pub struct CreatePackageConfig {
+    /// Swift tools version string at the top of `Package.swift`
+    pub swift_tools_version: String,
+
     /// The directory containing the generated bridges
     pub bridge_dir: PathBuf,
     /// Path per platform. e.g. `(ApplePlatform::iOS, "target/aarch64-apple-ios/debug/libmy_rust_lib.a")`
@@ -21,6 +24,12 @@ pub struct CreatePackageConfig {
 
     /// The name of the generated XC Framework
     pub xc_framework_name: String,
+    /// Supported platforms and versions for generated package
+    pub platforms_list: Vec<String>,
+    /// Package dependencies that go in the `dependencies` list in `Package.swift`
+    pub dependencies: String,
+    /// Package dependency targets that go as dependencies in the `targets` list in `Package.swift`
+    pub dependency_packages: Vec<String>,
 }
 
 impl CreatePackageConfig {
@@ -32,11 +41,15 @@ impl CreatePackageConfig {
         package_name: String,
     ) -> Self {
         Self {
+            swift_tools_version: "5.5.0".to_string(),
             bridge_dir,
             paths,
             out_dir,
             package_name,
             xc_framework_name: "RustXcframework".to_string(),
+            platforms_list: Vec::new(),
+            dependencies: "".to_string(),
+            dependency_packages: Vec::new(),
         }
     }
 }
@@ -124,7 +137,7 @@ fn gen_xcframework(output_dir: &Path, config: &CreatePackageConfig) {
 
     let include_dir = tmp_framework_path.join("include");
     if !include_dir.exists() {
-        fs::create_dir(&include_dir).expect("Couldn't create inlcude directory for xcframework");
+        fs::create_dir(&include_dir).expect("Couldn't create include directory for xcframework");
     }
 
     // Get XC Framework name from config
@@ -279,8 +292,17 @@ fn gen_package(output_dir: &Path, config: &CreatePackageConfig) {
         fs::create_dir_all(&tests_dir).expect("Couldn't create directory for test files");
     }
 
-    // Get XC Framework name from config
+    // Get packaged attributes from config
+    let swift_tools_version = &config.swift_tools_version;
     let xc_framework_name = &config.xc_framework_name;
+    let platforms_list = (&config.platforms_list).join(", ");
+    let dependencies = &config.dependencies;
+
+    let dependency_packages: Vec<String> = (&config.dependency_packages)
+        .iter()
+        .map(|package| format!("\"{}\"", package))
+        .collect();
+    let dependency_packages_string = dependency_packages.join(", ");
 
     // Copy bridge `.swift` files and append import statements
     let bridge_dir: &Path = config.bridge_dir.as_ref();
@@ -331,16 +353,17 @@ fn gen_package(output_dir: &Path, config: &CreatePackageConfig) {
     // Generate Package.swift
     let package_name = &config.package_name;
     let package_swift = format!(
-        r#"// swift-tools-version:5.5.0
+        r#"// swift-tools-version:{swift_tools_version}
 import PackageDescription
 let package = Package(
 	name: "{package_name}",
+    platforms: [{platforms_list}],
 	products: [
 		.library(
 			name: "{package_name}",
 			targets: ["{package_name}"]),
 	],
-	dependencies: [],
+	dependencies: [{dependencies}],
 	targets: [
 		.binaryTarget(
 			name: "{xc_framework_name}",
@@ -348,10 +371,11 @@ let package = Package(
 		),
 		.target(
 			name: "{package_name}",
-			dependencies: ["{xc_framework_name}"]),
+			dependencies: ["{xc_framework_name}", {dependency_packages_string}]
+        ),
         .testTarget(
             name: "{package_name}Tests",
-            dependencies: ["{package_name}", "{xc_framework_name}"]
+            dependencies: ["{package_name}", "{xc_framework_name}", {dependency_packages_string}]
         )
 	]
 )
