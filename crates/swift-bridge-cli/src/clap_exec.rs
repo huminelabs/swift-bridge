@@ -27,7 +27,7 @@ fn handle_create_package(matches: &ArgMatches) {
         package_name: name.to_string(),
         xc_framework_name: "RustXcframework".to_string(),
         platforms_list: Vec::new(),
-        dependencies: "".to_string(),
+        dependencies: Vec::new(),
         dependency_packages: Vec::new(),
     };
 

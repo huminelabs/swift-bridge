@@ -27,7 +27,7 @@ pub struct CreatePackageConfig {
     /// Supported platforms and versions for generated package
     pub platforms_list: Vec<String>,
     /// Package dependencies that go in the `dependencies` list in `Package.swift`
-    pub dependencies: String,
+    pub dependencies: Vec<String>,
     /// Package dependency targets that go as dependencies in the `targets` list in `Package.swift`
     pub dependency_packages: Vec<String>,
 }
@@ -48,7 +48,7 @@ impl CreatePackageConfig {
             package_name,
             xc_framework_name: "RustXcframework".to_string(),
             platforms_list: Vec::new(),
-            dependencies: "".to_string(),
+            dependencies: Vec::new(),
             dependency_packages: Vec::new(),
         }
     }
@@ -296,7 +296,7 @@ fn gen_package(output_dir: &Path, config: &CreatePackageConfig) {
     let swift_tools_version = &config.swift_tools_version;
     let xc_framework_name = &config.xc_framework_name;
     let platforms_list = (&config.platforms_list).join(", ");
-    let dependencies = &config.dependencies;
+    let dependencies = (&config.dependencies).join(", ");
 
     let dependency_packages: Vec<String> = (&config.dependency_packages)
         .iter()
